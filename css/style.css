@@ -1,0 +1,139 @@
+/* General page structure */
+html, body {
+    height: 100%;
+    margin: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Dark mode base */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Navbar */
+.navbar {
+    margin-bottom: 1rem;
+}
+body.dark-mode .navbar {
+    background-color: #1e1e1e !important;
+}
+
+/* Footer */
+footer {
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
+
+/* Main layout */
+main {
+    flex: 1 0 auto;
+    padding-bottom: 2rem;
+}
+
+/* Table */
+.table {
+    margin-bottom: 2rem;
+}
+body.dark-mode .table {
+    color: #ffffff;
+}
+body.dark-mode table td,
+body.dark-mode table th {
+    color: #ffffff !important;
+}
+
+/* Table striped dark mode fixes */
+body.dark-mode .table-striped tbody tr {
+    background-color: #1a1a1a !important;
+}
+body.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #1f1f1f !important;
+}
+
+/* Priority row backgrounds (dark) */
+body.dark-mode .table-danger {
+    background-color: #2a0a12 !important; /* High priority (red) */
+}
+body.dark-mode .table-warning {
+    background-color: #2a2a0a !important; /* Medium priority (yellow/olive) */
+}
+body.dark-mode .table-success {
+    background-color: #0a2a12 !important; /* Low priority (green) */
+}
+
+/* Priority row text override */
+body.dark-mode .table-danger td,
+body.dark-mode .table-warning td,
+body.dark-mode .table-success td {
+    color: #000000 !important;
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+}
+body.dark-mode .badge {
+    color: #ffffff;
+}
+
+/* Form controls */
+#taskForm {
+    margin-bottom: 2rem;
+}
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
+}
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+    background-color: #2d2d2d;
+    border-color: #606060;
+    color: #ffffff;
+}
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #bbbbbb;
+}
+
+/* Buttons */
+body.dark-mode .btn,
+body.dark-mode .btn i {
+    color: #ffffff;
+}
+
+body.dark-mode .btn-outline-primary,
+body.dark-mode .btn-outline-secondary {
+    color: #ffffff;
+    border-color: #555555;
+}
+body.dark-mode .btn-outline-primary:hover,
+body.dark-mode .btn-outline-primary.active,
+body.dark-mode .btn-outline-secondary:hover {
+    background-color: #555555;
+    color: #ffffff;
+}
+
+/* Toggle animation */
+#darkModeToggle {
+    transition: transform 0.5s ease;
+}
+#darkModeToggle.flip {
+    transform: rotate(360deg);
+}
+
+body.dark-mode thead tr,
+body.dark-mode thead th {
+    background-color: #232323 !important;
+    color: #fff !important;
+}
