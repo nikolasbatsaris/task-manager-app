@@ -1,321 +1,254 @@
-let tasks = [];
-let editingIndex = -1;
-let currentSort = { field: 'name', order: 'asc' };
-let currentFilter = 'all';
-
-// Load dark mode preference
-function loadDarkMode() {
-  const isDarkMode = localStorage.getItem('darkMode') === 'true';
-  if (isDarkMode) {
-    document.body.classList.add('dark-mode');
-    $('#darkModeToggle i').removeClass('bi-moon-fill').addClass('bi-sun-fill');
-  }
-}
-
-// Toggle dark mode
-function toggleDarkMode() {
-  const isDarkMode = document.body.classList.toggle('dark-mode');
-  localStorage.setItem('darkMode', isDarkMode);
-  
-  // Animate the button
-  const button = $('#darkModeToggle');
-  button.addClass('flip');
-  setTimeout(() => {
-    button.removeClass('flip');
-    button.find('i').toggleClass('bi-moon-fill bi-sun-fill');
-  }, 500);
-}
-
-// Load tasks from localStorage
-function loadTasks() {
-  const savedTasks = localStorage.getItem('tasks');
-  if (savedTasks) {
-    tasks = JSON.parse(savedTasks);
-    updateTable();
-  }
-}
-
-// Save tasks to localStorage
-function saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-}
-
-function getPriorityClass(priority) {
-  switch(priority) {
-    case 'high': return 'table-danger';
-    case 'medium': return 'table-warning';
-    case 'low': return 'table-success';
-    default: return '';
-  }
-}
-
-function getPriorityBadge(priority) {
-  const colors = {
-    high: 'danger',
-    medium: 'warning',
-    low: 'success'
-  };
-  return `<span class="badge bg-${colors[priority]}">${priority.charAt(0).toUpperCase() + priority.slice(1)}</span>`;
-}
-
-function sortTasks(tasks) {
-  // If manual sort is selected, return tasks in their current order
-  if (currentSort.field === 'manual') {
-    return tasks;
-  }
-
-  return [...tasks].sort((a, b) => {
-    let comparison = 0;
-    if (currentSort.field === 'name') {
-      comparison = a.name.localeCompare(b.name);
-    } else if (currentSort.field === 'dueDate') {
-      comparison = new Date(a.dueDate) - new Date(b.dueDate);
-    } else if (currentSort.field === 'priority') {
-      const priorityOrder = { high: 0, medium: 1, low: 2 };
-      comparison = priorityOrder[a.priority] - priorityOrder[b.priority];
-    }
-    return currentSort.order === 'asc' ? comparison : -comparison;
-  });
-}
-
-function filterTasks(tasks) {
-  if (currentFilter === 'all') return tasks;
-  return tasks.filter(task => 
-    currentFilter === 'completed' ? task.completed : !task.completed
-  );
-}
-
-function updateTable() {
-  const tbody = $("#taskTable tbody");
-  tbody.empty();
-
-  let completed = 0;
-  let pending = 0;
-
-  // Sort and filter tasks
-  const sortedTasks = sortTasks(tasks);
-  const filteredTasks = filterTasks(sortedTasks);
-
-  filteredTasks.forEach((task, index) => {
-    const statusBadge = task.completed
-      ? `<span class="badge bg-success">Completed</span>`
-      : `<span class="badge bg-warning text-dark">Pending</span>`;
-
-    if (task.completed) completed++;
-    else pending++;
-
-    const row = `
-      <tr class="${getPriorityClass(task.priority)}" data-index="${tasks.indexOf(task)}">
-        <td>${task.name}</td>
-        <td>${task.description}</td>
-        <td>${task.dueDate}</td>
-        <td>${statusBadge} ${getPriorityBadge(task.priority)}</td>
-        <td>
-          <button class="btn btn-sm btn-success complete-btn" data-index="${tasks.indexOf(task)}">✓</button>
-          <button class="btn btn-sm btn-primary edit-btn" data-index="${tasks.indexOf(task)}">✏️</button>
-          <button class="btn btn-sm btn-danger delete-btn" data-index="${tasks.indexOf(task)}">✕</button>
-        </td>
-      </tr>
-    `;
-    tbody.append(row);
-  });
-
-  // Initialize sortable after adding rows
-  initializeSortable();
-
-  $("#totalTasks").text(tasks.length);
-  $("#completedTasks").text(completed);
-  $("#pendingTasks").text(pending);
-}
-
-function initializeSortable() {
-  $("#taskTable tbody").sortable({
-    items: "tr",
-    cursor: "move",
-    opacity: 0.6,
-    helper: function(e, tr) {
-      const $originals = tr.children();
-      const $helper = tr.clone();
-      $helper.children().each(function(index) {
-        $(this).width($originals.eq(index).width());
-      });
-      return $helper;
-    },
-    update: function(event, ui) {
-      // Get the new order of tasks
-      const newOrder = [];
-      $("#taskTable tbody tr").each(function() {
-        const index = $(this).data('index');
-        newOrder.push(tasks[index]);
-      });
-      
-      // Update the tasks array with the new order
-      tasks = newOrder;
-      
-      // Save to localStorage
-      saveTasks();
-      
-      // Update the table to refresh button indexes
-      updateTable();
-    }
-  }).disableSelection();
-}
-
-function resetForm() {
-  $("#taskForm")[0].reset();
-  $("#submitBtn").text("Add");
-  editingIndex = -1;
-}
-
-function updateSortButton(button) {
-  const field = button.data('sort');
-  const order = button.data('order');
-  const newOrder = order === 'asc' ? 'desc' : 'asc';
-  const arrow = newOrder === 'asc' ? '↑' : '↓';
-  
-  // Reset all sort buttons
-  $('.sort-btn').each(function() {
-    $(this).data('order', 'asc');
-    $(this).text($(this).text().replace(/[↑↓]/, '↑'));
-  });
-  
-  // Update clicked button
-  button.data('order', newOrder);
-  
-  // Don't show arrow for manual sort
-  if (field === 'manual') {
-    button.text('Manual Sort');
-  } else {
-    button.text(button.text().replace(/[↑↓]/, arrow));
-  }
-}
-
 $(document).ready(function () {
-  // Load dark mode preference
-  loadDarkMode();
+  let shipments = [];
+  let editingIndex = -1;
 
-  // Dark mode toggle handler
-  $("#darkModeToggle").on("click", toggleDarkMode);
+  function loadShipments() {
+      const saved = localStorage.getItem("shipments");
+      if (saved) shipments = JSON.parse(saved);
+      updateTable();
+  }
 
-  // Load saved tasks when page loads
-  loadTasks();
+  function saveShipments() {
+      localStorage.setItem("shipments", JSON.stringify(shipments));
+  }
 
-  // Export tasks to file
-  $("#exportBtn").on("click", function() {
-    const tasksJson = JSON.stringify(tasks, null, 2);
-    const blob = new Blob([tasksJson], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'tasks.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  });
+  function updateTable() {
+      console.log('Updating table with shipments:', shipments); // Debug log
+      const tbody = $("#taskTable tbody");
+      tbody.empty();
 
-  // Import tasks from file
-  $("#importBtn").on("click", function() {
-    $("#importFile").click();
-  });
+      if (shipments.length === 0) {
+          tbody.append('<tr><td colspan="5" class="text-center">No shipments found</td></tr>');
+          return;
+      }
 
-  $("#importFile").on("change", function(e) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const importedTasks = JSON.parse(e.target.result);
-          if (Array.isArray(importedTasks)) {
-            tasks = importedTasks;
-            saveTasks();
-            updateTable();
-            alert('Tasks imported successfully!');
-          } else {
-            alert('Invalid file format. Please import a valid tasks file.');
+      shipments.forEach((shipment, index) => {
+          // Skip null or invalid shipments
+          if (!shipment || typeof shipment !== 'object' || !shipment.shipmentId) {
+              console.warn('Skipping invalid shipment at index', index, shipment);
+              return;
           }
-        } catch (error) {
-          alert('Error importing tasks. Please check the file format.');
-        }
-      };
-      reader.readAsText(file);
-    }
-    // Reset the file input
-    this.value = '';
-  });
+          console.log('Creating row for shipment:', shipment); // Debug log
+          const row = `
+              <tr>
+                  <td>${shipment.shipmentId}</td>
+                  <td>${shipment.description || ''}</td>
+                  <td>${shipment.arrival}</td>
+                  <td>${shipment.urgency}</td>
+                  <td>${shipment.status || ''}</td>
+                  <td>
+                      <button class="btn btn-sm btn-primary edit-btn" data-index="${index}">Edit</button>
+                      <button class="btn btn-sm btn-danger delete-btn" data-index="${index}">Delete</button>
+                  </td>
+              </tr>
+          `;
+          tbody.append(row);
+      });
+      renderMiniCalendar();
+  }
 
   $("#taskForm").on("submit", function (e) {
-    e.preventDefault();
-    const name = $("#taskName").val();
-    const desc = $("#taskDesc").val();
-    const due = $("#taskDue").val();
-    const priority = $("#taskPriority").val();
+      e.preventDefault();
+      console.log('Form submitted'); // Debug log
+      
+      const shipmentId = $("#taskName").val().trim();
+      const description = $("#taskDesc").val().trim();
+      const arrival = $("#taskDue").val();
+      const urgency = $("#taskPriority").val();
+      const status = $("#status").val();
 
-    if (editingIndex === -1) {
-      tasks.push({
-        name,
-        description: desc,
-        dueDate: due,
-        priority,
-        completed: false
-      });
-    } else {
-      tasks[editingIndex] = {
-        ...tasks[editingIndex],
-        name,
-        description: desc,
-        dueDate: due,
-        priority
+      console.log('Form values:', { shipmentId, description, arrival, urgency, status }); // Debug log
+
+      // Validate form
+      if (!shipmentId) {
+          alert('Please enter a shipment ID');
+          $("#taskName").focus();
+          return;
+      }
+      if (!arrival) {
+          alert('Please select an arrival date');
+          $("#taskDue").focus();
+          return;
+      }
+      if (!urgency) {
+          alert('Please select an urgency');
+          $("#taskPriority").focus();
+          return;
+      }
+      if (!status) {
+          alert('Please select a status');
+          $("#status").focus();
+          return;
+      }
+
+      // Create new shipment object
+      const newShipment = {
+          shipmentId,
+          description,
+          arrival,
+          urgency,
+          status
       };
-    }
 
-    resetForm();
-    updateTable();
-    saveTasks();
-  });
+      if (editingIndex === -1) {
+          console.log('Adding new shipment:', newShipment); // Debug log
+          shipments.push(newShipment);
+      } else {
+          console.log('Updating shipment at index:', editingIndex, 'with:', newShipment); // Debug log
+          shipments[editingIndex] = newShipment;
+      }
 
-  // Sort button click handler
-  $(".sort-btn").on("click", function() {
-    const field = $(this).data('sort');
-    const order = $(this).data('order');
-    
-    currentSort = { field, order };
-    updateSortButton($(this));
-    updateTable();
-  });
-
-  // Filter button click handler
-  $(".filter-btn").on("click", function() {
-    $(".filter-btn").removeClass("active");
-    $(this).addClass("active");
-    currentFilter = $(this).data('filter');
-    updateTable();
-  });
-
-  $("#taskTable").on("click", ".complete-btn", function () {
-    const index = $(this).data("index");
-    tasks[index].completed = true;
-    updateTable();
-    saveTasks();
+      console.log('Current shipments:', shipments); // Debug log
+      
+      // Reset form and update display
+      $("#taskForm")[0].reset();
+      editingIndex = -1;
+      $("#taskForm button[type='submit']").text('Add Shipment');
+      updateTable();
+      saveShipments();
   });
 
   $("#taskTable").on("click", ".edit-btn", function () {
-    const index = $(this).data("index");
-    const task = tasks[index];
-    
-    $("#taskName").val(task.name);
-    $("#taskDesc").val(task.description);
-    $("#taskDue").val(task.dueDate);
-    $("#taskPriority").val(task.priority);
-    $("#submitBtn").text("Update");
-    
-    editingIndex = index;
+      const index = $(this).data("index");
+      console.log('Editing shipment at index:', index); // Debug log
+      const shipment = shipments[index];
+
+      $("#taskName").val(shipment.shipmentId);
+      $("#taskDesc").val(shipment.description);
+      $("#taskDue").val(shipment.arrival);
+      $("#taskPriority").val(shipment.urgency);
+      $("#status").val(shipment.status);
+      
+      editingIndex = index;
+      $("#taskForm button[type='submit']").text('Save Edit');
+      $("html, body").animate({ scrollTop: $("#taskForm").offset().top - 20 }, 500);
   });
 
   $("#taskTable").on("click", ".delete-btn", function () {
-    const index = $(this).data("index");
-    tasks.splice(index, 1);
-    updateTable();
-    saveTasks();
+      const index = $(this).data("index");
+      if (confirm("Are you sure you want to delete this shipment?")) {
+          shipments.splice(index, 1);
+          updateTable();
+          saveShipments();
+      }
   });
+
+  $("[data-sort]").on("click", function() {
+      const sortBy = $(this).data("sort");
+      console.log('Sorting by:', sortBy); // Debug log
+
+      // Only sort valid shipments
+      const validShipments = shipments.filter(shipment => shipment && typeof shipment === 'object' && shipment[sortBy]);
+      validShipments.sort((a, b) => {
+          if (sortBy === 'shipmentId') {
+              return a.shipmentId.localeCompare(b.shipmentId);
+          } else if (sortBy === 'arrival') {
+              return new Date(a.arrival) - new Date(b.arrival);
+          } else if (sortBy === 'urgency') {
+              const urgencyOrder = { high: 0, medium: 1, low: 2 };
+              return urgencyOrder[a.urgency.toLowerCase()] - urgencyOrder[b.urgency.toLowerCase()];
+          } else if (sortBy === 'status') {
+              const statusOrder = { 'In Transit': 0, 'Delivered': 1, 'Delayed': 2 };
+              return statusOrder[a.status] - statusOrder[b.status];
+          }
+      });
+      // Replace only the valid part of the array, keep invalids in place
+      let vi = 0;
+      shipments = shipments.map(shipment => (shipment && typeof shipment === 'object' && shipment[sortBy]) ? validShipments[vi++] : shipment);
+      updateTable();
+      saveShipments();
+  });
+
+  // Dark mode toggle logic
+  function setDarkMode(enabled) {
+      if (enabled) {
+          $('body').addClass('dark-mode');
+          $('#darkModeIcon').text('☀️');
+      } else {
+          $('body').removeClass('dark-mode');
+          $('#darkModeIcon').text('🌙');
+      }
+  }
+
+  // On page load, set dark mode if saved
+  const darkPref = localStorage.getItem('darkMode') === 'true';
+  setDarkMode(darkPref);
+
+  $('#darkModeToggle').on('click', function() {
+      const isDark = !$('body').hasClass('dark-mode');
+      setDarkMode(isDark);
+      localStorage.setItem('darkMode', isDark);
+  });
+
+  // Mini Calendar rendering
+  function renderMiniCalendar() {
+      const calendarEl = document.getElementById('miniCalendar');
+      if (!calendarEl) return;
+
+      // Get all arrival dates
+      const shipmentDates = {};
+      shipments.forEach(shipment => {
+          if (!shipment || !shipment.arrival) return;
+          if (!shipmentDates[shipment.arrival]) shipmentDates[shipment.arrival] = [];
+          shipmentDates[shipment.arrival].push(shipment);
+      });
+
+      // Get current month/year
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const startDay = firstDay.getDay();
+      const daysInMonth = lastDay.getDate();
+
+      // Build calendar HTML
+      let html = '<table class="mini-calendar-table">';
+      html += '<thead><tr>';
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      for (let d = 0; d < 7; d++) html += `<th>${days[d]}</th>`;
+      html += '</tr></thead><tbody><tr>';
+
+      // Empty cells before first day
+      for (let i = 0; i < startDay; i++) html += '<td></td>';
+
+      for (let day = 1; day <= daysInMonth; day++) {
+          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const isToday = (today.getDate() === day && today.getMonth() === month && today.getFullYear() === year);
+          const hasShipment = shipmentDates[dateStr] && shipmentDates[dateStr].length > 0;
+          let tdClass = '';
+          if (isToday) tdClass += ' today';
+          if (hasShipment) tdClass += ' has-shipment';
+          html += `<td class="${tdClass.trim()}" data-date="${dateStr}">${day}`;
+          if (hasShipment) {
+              html += `<div class="mini-calendar-popup">`;
+              shipmentDates[dateStr].forEach(s => {
+                  html += `<div><strong>${s.shipmentId}</strong> (${s.urgency})<br><span style='font-size:0.95em;'>${s.description || ''}</span><br><em>Status: ${s.status || ''}</em></div><hr style='margin:4px 0;'>`;
+              });
+              html += `</div>`;
+          }
+          html += '</td>';
+          if ((startDay + day) % 7 === 0 && day !== daysInMonth) html += '</tr><tr>';
+      }
+      // Empty cells after last day
+      const endDay = (startDay + daysInMonth) % 7;
+      if (endDay !== 0) for (let i = endDay; i < 7; i++) html += '<td></td>';
+      html += '</tr></tbody></table>';
+      calendarEl.innerHTML = html;
+
+      // Popup logic
+      $("#miniCalendar td.has-shipment").on('click', function(e) {
+          e.stopPropagation();
+          $("#miniCalendar td.has-shipment").removeClass('active');
+          $(this).addClass('active');
+      });
+      $(document).on('click', function() {
+          $("#miniCalendar td.has-shipment").removeClass('active');
+      });
+  }
+
+  // Also call it on page load
+  $(function() { renderMiniCalendar(); });
+
+  loadShipments();
 });

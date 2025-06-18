@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Task Manager App</title>
+  <title>ShipTrackr - Home</title>
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,14 +14,81 @@
 </head>
 <body>
 
-  <!-- HEADER NAV HERE -->
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <span style="font-size:1.5rem;">🚚</span>
+        <span class="ms-2 fw-bold">ShipTrackr</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="tasks.html">Tasks</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="extrapage.html">Extra</a></li>
+        </ul>
+        <button class="btn btn-outline-light ms-3" id="darkModeToggle" title="Toggle dark mode">
+          <span id="darkModeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </nav>
 
-  <div class="container mt-4">
-    <h1>Welcome to Task Manager</h1>
-    <!-- Page-specific content goes here -->
-  </div>
+  <!-- Welcome Section -->
+  <section class="container py-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <h1 class="display-5 fw-bold">Welcome to ShipTrackr</h1>
+        <p class="lead">ShipTrackr is your all-in-one solution for managing shipments and tasks in your company. Track, organize, and stay on top of your logistics with ease.</p>
+        <ul>
+          <li>Easy shipment and task management</li>
+          <li>Calendar and activity tracking</li>
+          <li>Responsive, modern design</li>
+          <li>Dark mode support</li>
+        </ul>
+        <a href="tasks.html" class="btn btn-primary btn-lg mt-3">Go to Tasks</a>
+      </div>
+      <div class="col-md-6 text-center">
+        <img src="images/shipping-illustration.png" alt="Shipping Illustration" class="img-fluid rounded shadow" style="max-height: 320px;">
+      </div>
+    </div>
+  </section>
 
-  <!-- FOOTER HERE -->
+  <!-- Latest Activity Section -->
+  <section class="container mb-5">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Latest Activity</h5>
+      </div>
+      <div class="card-body" id="latestActivity">
+        <p class="text-muted mb-0">No recent activity yet.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer bg-primary text-light py-4 mt-auto">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <div class="d-flex align-items-center mb-2 mb-md-0">
+        <span style="font-size:1.5rem;">🚚</span>
+        <span class="ms-2 fw-bold">ShipTrackr</span>
+      </div>
+      <div>
+        &copy; 2025 ShipTrackr Inc. All rights reserved.
+      </div>
+      <div>
+        <a href="mailto:info@shiptrackr.com" class="text-light me-3">info@shiptrackr.com</a>
+        <a href="#" class="text-light me-2"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="text-light me-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -29,5 +96,49 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Custom JS -->
   <script src="js/script.js"></script>
+  <script>
+  // Dark mode toggle logic (identical to tasks page)
+  function setDarkMode(enabled) {
+    if (enabled) {
+      $('body').addClass('dark-mode');
+      $('#darkModeIcon').text('☀️');
+    } else {
+      $('body').removeClass('dark-mode');
+      $('#darkModeIcon').text('🌙');
+    }
+  }
+  $(function() {
+    const darkPref = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(darkPref);
+    $('#darkModeToggle').on('click', function() {
+      const isDark = !$('body').hasClass('dark-mode');
+      setDarkMode(isDark);
+      localStorage.setItem('darkMode', isDark);
+    });
+
+    // Latest Activity Section
+    function renderLatestActivity() {
+      let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+      if (!Array.isArray(shipments)) shipments = [];
+      // Sort by arrival date descending, then by last added
+      shipments = shipments.filter(s => s && s.shipmentId && s.arrival).sort((a, b) => new Date(b.arrival) - new Date(a.arrival));
+      let html = '';
+      if (shipments.length === 0) {
+        html = '<p class="text-muted mb-0">No recent activity yet.</p>';
+      } else {
+        html = '<ul class="list-group list-group-flush">';
+        shipments.slice(0, 5).forEach(s => {
+          html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><strong>${s.shipmentId}</strong> - ${s.status || 'Pending'}<br><small class="text-muted">Arrival: ${s.arrival}</small></span>
+            <span class="badge bg-${s.status === 'Delivered' ? 'success' : s.status === 'Delayed' ? 'danger' : 'primary'}">${s.status || 'Pending'}</span>
+          </li>`;
+        });
+        html += '</ul>';
+      }
+      $('#latestActivity').html(html);
+    }
+    renderLatestActivity();
+  });
+  </script>
 </body>
 </html>
