@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Task Manager App</title>
+  <title>About - ShipTrackr</title>
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,14 +14,141 @@
 </head>
 <body>
 
-  <!-- HEADER NAV HERE -->
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <span style="font-size:1.5rem;">🚚</span>
+        <span class="ms-2 fw-bold">ShipTrackr</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="tasks.html">Tasks</a></li>
+          <li class="nav-item"><a class="nav-link active" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
+        </ul>
+        <button class="btn btn-outline-light ms-3" id="darkModeToggle" title="Toggle dark/light theme" aria-label="Toggle dark/light theme" data-bs-toggle="tooltip" data-bs-placement="bottom">
+          <span id="darkModeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </nav>
 
-  <div class="container mt-4">
-    <h1>Welcome to Task Manager</h1>
-    <!-- Page-specific content goes here -->
-  </div>
+  <!-- About Section -->
+  <section class="container py-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <h2 class="fw-bold mb-3">About ShipTrackr</h2>
+        <p class="lead">ShipTrackr is a modern shipment and task management platform designed to help companies streamline their logistics, improve team collaboration, and deliver on time, every time.</p>
+        <ul>
+          <li>Real-time shipment tracking and task management</li>
+          <li>Intuitive dashboard with calendar and activity feed</li>
+          <li>Fully responsive and accessible design</li>
+          <li>Dark mode for comfortable viewing</li>
+        </ul>
+      </div>
+      <div class="col-md-6 text-center">
+        <img src="images/about-illustration.png" alt="About ShipTrackr Illustration" class="img-fluid rounded shadow" style="max-height: 320px;">
+      </div>
+    </div>
+  </section>
 
-  <!-- FOOTER HERE -->
+  <!-- Team Section -->
+  <section class="container mb-5">
+    <h3 class="fw-bold text-center mb-4">Meet the Team</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+      <div class="col">
+        <div class="card h-100 text-center shadow-sm">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="card-img-top mx-auto mt-3 rounded-circle" alt="Avatar of Alex Johnson" style="width: 100px; height: 100px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title mb-1">Alex Johnson</h5>
+            <p class="text-muted mb-1">Lead Developer</p>
+            <p class="card-text">Passionate about building scalable web apps and making logistics simple for everyone.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 text-center shadow-sm">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="card-img-top mx-auto mt-3 rounded-circle" alt="Avatar of Maria Lee" style="width: 100px; height: 100px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title mb-1">Maria Lee</h5>
+            <p class="text-muted mb-1">UI/UX Designer</p>
+            <p class="card-text">Designs beautiful, user-friendly interfaces and ensures ShipTrackr is accessible to all.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 text-center shadow-sm">
+          <img src="https://randomuser.me/api/portraits/men/65.jpg" class="card-img-top mx-auto mt-3 rounded-circle" alt="Avatar of Sam Patel" style="width: 100px; height: 100px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title mb-1">Sam Patel</h5>
+            <p class="text-muted mb-1">Product Manager</p>
+            <p class="card-text">Coordinates the team and keeps the project on track with clear goals and vision.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Carousel Section -->
+  <section class="container mb-5">
+    <h3 class="fw-bold text-center mb-4">What Our Users Say</h3>
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" aria-label="Testimonials carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active text-center">
+          <img src="https://randomuser.me/api/portraits/men/12.jpg" class="rounded-circle mb-3" alt="Avatar of John Doe" style="width: 80px; height: 80px; object-fit: cover;">
+          <blockquote class="blockquote">
+            <p class="mb-2">"ShipTrackr made our logistics so much easier. The dashboard is intuitive and the team is super helpful!"</p>
+          </blockquote>
+          <footer class="blockquote-footer">John Doe, Logistics Manager</footer>
+        </div>
+        <div class="carousel-item text-center">
+          <img src="https://randomuser.me/api/portraits/women/22.jpg" class="rounded-circle mb-3" alt="Avatar of Jane Smith" style="width: 80px; height: 80px; object-fit: cover;">
+          <blockquote class="blockquote">
+            <p class="mb-2">"The calendar and activity feed keep our team on the same page. Highly recommended!"</p>
+          </blockquote>
+          <footer class="blockquote-footer">Jane Smith, Operations Lead</footer>
+        </div>
+        <div class="carousel-item text-center">
+          <img src="images/about-illustration.png" class="rounded mb-3" alt="App Screenshot" style="width: 80px; height: 80px; object-fit: cover;">
+          <blockquote class="blockquote">
+            <p class="mb-2">"We love the dark mode and mobile-friendly design. ShipTrackr fits right into our workflow."</p>
+          </blockquote>
+          <footer class="blockquote-footer">Team Review</footer>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev" aria-label="Previous testimonial">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next" aria-label="Next testimonial">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer bg-primary text-light py-4 mt-auto">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <div class="d-flex align-items-center mb-2 mb-md-0">
+        <span style="font-size:1.5rem;">🚚</span>
+        <span class="ms-2 fw-bold">ShipTrackr</span>
+      </div>
+      <div>
+        &copy; 2025 ShipTrackr Inc. All rights reserved.
+      </div>
+      <div>
+        <a href="mailto:info@shiptrackr.com" class="text-light me-3">info@shiptrackr.com</a>
+        <a href="#" class="text-light me-2"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="text-light me-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

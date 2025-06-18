@@ -159,7 +159,7 @@ $(document).ready(function () {
       saveShipments();
   });
 
-  // Dark mode toggle logic
+  // Dark mode toggle logic (shared for all pages)
   function setDarkMode(enabled) {
       if (enabled) {
           $('body').addClass('dark-mode');
@@ -179,6 +179,14 @@ $(document).ready(function () {
       setDarkMode(isDark);
       localStorage.setItem('darkMode', isDark);
   });
+
+  // Initialize Bootstrap tooltip for dark mode toggle
+  if (window.bootstrap && typeof bootstrap.Tooltip === 'function') {
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+  }
 
   // Mini Calendar rendering
   function renderMiniCalendar() {
@@ -249,6 +257,52 @@ $(document).ready(function () {
 
   // Also call it on page load
   $(function() { renderMiniCalendar(); });
+
+  // Mini Summary Section (only on Home page)
+  if ($('#miniSummary').length) {
+      function renderMiniSummary() {
+          let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+          if (!Array.isArray(shipments)) shipments = [];
+          const total = shipments.length;
+          const inTransit = shipments.filter(s => s.status === 'In Transit').length;
+          const delivered = shipments.filter(s => s.status === 'Delivered').length;
+          $('#summaryTotal').text(total);
+          $('#summaryInTransit').text(inTransit);
+          $('#summaryDelivered').text(delivered);
+      }
+      renderMiniSummary();
+  }
+
+  // Latest Activity Section (only on Home page)
+  if ($('#latestActivity').length) {
+      function renderLatestActivity() {
+          let shipments = JSON.parse(localStorage.getItem('shipments') || '[]');
+          if (!Array.isArray(shipments)) shipments = [];
+          // Sort by arrival date descending, then by last added
+          shipments = shipments.filter(s => s && s.shipmentId && s.arrival).sort((a, b) => new Date(b.arrival) - new Date(a.arrival));
+          let html = '';
+          if (shipments.length === 0) {
+              html = '<p class="text-muted mb-0">No recent activity yet.</p>';
+          } else {
+              html = '<ul class="list-group list-group-flush">';
+              shipments.slice(0, 5).forEach(s => {
+                  let emoji = '📦';
+                  let badge = 'primary';
+                  let statusText = s.status || 'Pending';
+                  if (statusText === 'Delivered') { emoji = '✅'; badge = 'success'; }
+                  else if (statusText === 'Delayed') { emoji = '⚠️'; badge = 'danger'; }
+                  else if (statusText === 'In Transit') { emoji = '📦'; badge = 'primary'; }
+                  html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+                      <span><span aria-label="Status icon" role="img">${emoji}</span> <strong>${s.shipmentId}</strong> - ${statusText}<br><small class="text-muted">Arrival: ${s.arrival}</small></span>
+                      <span class="badge bg-${badge}" aria-label="${statusText}">${statusText}</span>
+                  </li>`;
+              });
+              html += '</ul>';
+          }
+          $('#latestActivity').html(html);
+      }
+      renderLatestActivity();
+  }
 
   loadShipments();
 });

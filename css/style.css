@@ -579,3 +579,19 @@ body.dark-mode .mini-calendar-popup {
     color: #f1f1f1;
     border-color: #343a40;
 }
+
+body.dark-mode .accordion-item,
+body.dark-mode .accordion-button,
+body.dark-mode .accordion-body {
+    background-color: #23272b !important;
+    color: #f1f1f1 !important;
+    border-color: #343a40 !important;
+}
+body.dark-mode .accordion-button:not(.collapsed) {
+    background-color: #23272b !important;
+    color: #f1f1f1 !important;
+    box-shadow: none;
+}
+body.dark-mode .accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
