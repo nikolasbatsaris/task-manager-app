@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Report - ShipTrackr</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome (optional) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hero-bg {
+      background: linear-gradient(90deg, #0d6efd 60%, #6ea8fe 100%);
+      color: #fff;
+      border-radius: 1rem;
+    }
+    .feature-icon {
+      font-size: 2.5rem;
+      color: #0d6efd;
+    }
+    .timeline {
+      border-left: 3px solid #0d6efd;
+      margin-left: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline-event {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    .timeline-event::before {
+      content: '';
+      position: absolute;
+      left: -1.7rem;
+      top: 0.3rem;
+      width: 1rem;
+      height: 1rem;
+      background: #0d6efd;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      z-index: 1;
+    }
+    .author-card {
+      max-width: 350px;
+      margin: 0 auto;
+    }
+    .qr-img {
+      width: 100px;
+      height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <a href="#mainContent" class="visually-hidden-focusable">Skip to main content</a>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <span style="font-size:1.5rem;">🚚</span>
+        <span class="ms-2 fw-bold">ShipTrackr</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="tasks.html">Tasks</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="report.html">Report</a></li>
+        </ul>
+        <button class="btn btn-outline-light ms-3" id="darkModeToggle" title="Toggle dark/light theme" aria-label="Toggle dark/light theme" data-bs-toggle="tooltip" data-bs-placement="bottom">
+          <span id="darkModeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="container my-5 hero-bg py-5 px-4 shadow" aria-label="Project Overview">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h1 class="display-4 fw-bold mb-3">ShipTrackr Project Report</h1>
+        <p class="lead">A modern, client-side shipment and task management platform for logistics teams. Built for speed, clarity, and real-world usability.</p>
+        <ul class="list-unstyled">
+          <li><i class="fa fa-check-circle me-2"></i>Fully responsive & accessible</li>
+          <li><i class="fa fa-check-circle me-2"></i>Dark mode & modern UI</li>
+          <li><i class="fa fa-check-circle me-2"></i>Interactive analytics & calendar</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download PDF Button -->
+  <div class="container mb-4 text-end">
+    <a href="Batsaris Report.pdf" download class="btn btn-outline-primary" aria-label="Download report as PDF"><i class="fa fa-file-pdf me-2"></i>Download PDF Report</a>
+  </div>
+
+  <main class="container py-5" id="mainContent">
+    <!-- Project Specifications -->
+    <section class="mb-5" aria-label="Project Specifications">
+      <h2 class="fw-semibold mb-4 text-primary"><i class="fa fa-list-check me-2"></i>Project Specifications</h2>
+      <ul>
+        <li>Five pages: Home, Tasks, About, Contact, and a custom page (FAQ).</li>
+        <li>All DOM manipulation done with jQuery.</li>
+        <li>Well-formed HTML with appropriate metadata.</li>
+        <li>Fully responsive design using Bootstrap.</li>
+        <li>Sticky navigation bar with logo and links.</li>
+        <li>Dark mode toggle on all pages.</li>
+        <li>Task management: add, edit, delete, mark complete, filter, sort, and prioritize tasks.</li>
+        <li>Summary and analytics of tasks (total, pending, completed, by priority).</li>
+        <li>About page with team grid and carousel (team is fictional).</li>
+        <li>Contact page with form, Google Maps, and social media links.</li>
+        <li>Custom FAQ page with at least three components.</li>
+        <li>Accessibility: ARIA labels, alt text, and proper meta tags.</li>
+        <li>Client-side form validation for all forms.</li>
+        <li>Version control with Git and GitHub.</li>
+        <li>Ready for in-class presentation and code explanation.</li>
+      </ul>
+    </section>
+
+    <!-- How the Requirements Were Met -->
+    <section class="mb-5" aria-label="How Requirements Were Met">
+      <h2 class="fw-semibold mb-4 text-primary"><i class="fa fa-check-double me-2"></i>How the Requirements Were Met</h2>
+      <ul>
+        <li><strong>Home Page:</strong> Features a welcome section, latest activity, sticky navbar, and dark mode toggle. The call-to-action button links to the Tasks page.</li>
+        <li><strong>Tasks Page:</strong> Users can add, edit, delete, and mark tasks as completed. Tasks can be filtered and sorted. Priorities are color-coded and filterable. A summary section shows total, pending, and completed tasks.</li>
+        <li><strong>About Page:</strong> Includes a fictional team grid with avatars and a Bootstrap carousel for testimonials.</li>
+        <li><strong>Contact Page:</strong> Contains a validated contact form, Google Maps embed, and social media icons. Form submissions appear as pop-ups.</li>
+        <li><strong>FAQ Page:</strong> Accordion for common questions, a roadmap timeline, and onboarding cards.</li>
+        <li><strong>All Pages:</strong> Use Bootstrap for layout and responsiveness, and jQuery for all DOM manipulation. Navigation and footer are consistent. Accessibility and ARIA standards are followed.</li>
+        <li><strong>Version Control:</strong> All code is tracked with Git and available on GitHub.</li>
+        <li><strong>Presentation Ready:</strong> The site is ready for live demonstration and code walkthrough in class.</li>
+      </ul>
+    </section>
+
+    <!-- Key Features -->
+    <section class="mb-5" aria-label="Key Features">
+      <h2 class="fw-semibold mb-4 text-primary"><i class="fa fa-star me-2"></i>Key Features</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 text-center p-3">
+            <div class="feature-icon mb-2"><i class="fa fa-calendar-alt"></i></div>
+            <h5 class="fw-bold">Mini Calendar</h5>
+            <p class="mb-0">Visualize shipment arrivals and deadlines at a glance with an interactive calendar.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 text-center p-3">
+            <div class="feature-icon mb-2"><i class="fa fa-chart-bar"></i></div>
+            <h5 class="fw-bold">Analytics Dashboard</h5>
+            <p class="mb-0">Real-time shipment statistics and trends, powered by Chart.js and Bootstrap cards.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 text-center p-3">
+            <div class="feature-icon mb-2"><i class="fa fa-moon"></i></div>
+            <h5 class="fw-bold">Dark Mode</h5>
+            <p class="mb-0">Seamless dark/light theme toggle for comfortable use day or night.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coding Decisions -->
+    <section class="mb-5" aria-label="Coding Decisions">
+      <h2 class="h4 fw-bold">Coding Decisions</h2>
+      <ul>
+        <li><strong>jQuery for DOM Manipulation:</strong> All dynamic updates (adding, editing, deleting tasks, updating tables, toggling dark mode) are handled with jQuery for simplicity and assignment compliance.</li>
+        <li><strong>Bootstrap for Layout:</strong> Used for grid, cards, navbar, forms, and responsive design. Ensures a modern look and mobile compatibility.</li>
+        <li><strong>localStorage:</strong> Used for client-side data persistence, so tasks and shipments remain after page reloads.</li>
+        <li><strong>Component Reuse:</strong> Navbar and footer are reused across all pages for consistency.</li>
+        <li><strong>Accessibility:</strong> ARIA labels, alt text, and keyboard navigation are implemented where possible.</li>
+        <li><strong>Form Validation:</strong> All forms use client-side validation for required fields and correct formats.</li>
+        <li><strong>Bonus Features:</strong> Priority color-coding, FAQ accordion, onboarding cards, and a roadmap timeline on the FAQ page.</li>
+      </ul>
+    </section>
+
+    <!-- Lessons Learned -->
+    <section class="mb-5" aria-label="Lessons Learned">
+      <h2 class="fw-semibold mb-3 text-primary"><i class="fa fa-lightbulb me-2"></i>Lessons Learned</h2>
+      <ul>
+        <li>jQuery is powerful for DOM manipulation, but can get verbose for complex UIs.</li>
+        <li>Bootstrap makes responsive design much easier, but customizing components for a unique look takes extra effort.</li>
+        <li>Ensuring accessibility and good UX requires attention to detail (ARIA, alt text, keyboard navigation).</li>
+        <li>Testing on different devices and browsers is essential for a polished result.</li>
+        <li>Version control (Git) is invaluable for tracking changes and collaborating, even on solo projects.</li>
+      </ul>
+    </section>
+
+    <!-- Future Improvements -->
+    <section class="mb-5" aria-label="Future Improvements">
+      <h2 class="fw-semibold mb-3 text-primary"><i class="fa fa-rocket me-2"></i>Future Improvements</h2>
+      <ul>
+        <li>Add user authentication and multi-user support.</li>
+        <li>Implement backend integration for persistent, cross-device data.</li>
+        <li>Expand analytics with more advanced visualizations and export options.</li>
+        <li>Enhance accessibility with keyboard shortcuts and improved ARIA roles.</li>
+      </ul>
+    </section>
+
+    <!-- GitHub Repository Section -->
+    <section class="mb-5" aria-label="GitHub Repository">
+      <h2 class="fw-semibold mb-3 text-primary"><i class="fa fa-github me-2"></i>GitHub Repository</h2>
+      <div class="d-flex align-items-center flex-wrap gap-4">
+        <a href="https://github.com/nikolasbatsaris/task-manager-app.git" target="_blank" class="btn btn-dark btn-lg" aria-label="View ShipTrackr on GitHub"><i class="fab fa-github me-2"></i>View on GitHub</a>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://github.com/nikolasbatsaris/task-manager-app.git" alt="QR code for GitHub repo" class="qr-img rounded border">
+      </div>
+    </section>
+
+    <!-- Reflections -->
+    <section class="mb-5" aria-label="Reflections">
+      <h2 class="h4 fw-bold">Reflections</h2>
+      <p>This coursework was completed individually and served as a valuable opportunity to deepen my frontend development skills. Taking full ownership of the project meant managing everything from planning and interface design to coding, testing, and deployment. One of the most challenging aspects was using jQuery for all DOM manipulation, which required a different mindset than working with modern frameworks. Ensuring consistency in layout, responsiveness, and dark mode integration across multiple pages added complexity, especially when coordinating Bootstrap components and localStorage behavior.</p>
+      <p>I particularly enjoyed building out dynamic features like the interactive calendar, analytics charts, and form modals, and seeing how small UI tweaks could improve the overall user experience. The project helped reinforce core concepts such as responsive grid systems, modular JavaScript structuring, and accessibility best practices using ARIA labels and semantic HTML. Managing version control with Git also played a key role in maintaining an organized workflow. Overall, I'm proud of the final result and feel more confident moving forward into more advanced development projects involving frameworks like React or Vue.</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer bg-primary text-light py-4 mt-auto">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <div class="d-flex align-items-center mb-2 mb-md-0">
+        <span style="font-size:1.5rem;">🚚</span>
+        <span class="ms-2 fw-bold">ShipTrackr</span>
+      </div>
+      <div>
+        &copy; 2025 ShipTrackr Inc. All rights reserved.
+      </div>
+      <div>
+        <a href="mailto:info@shiptrackr.com" class="text-light me-3">info@shiptrackr.com</a>
+        <a href="#" class="text-light me-2"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="text-light me-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS (for dark mode toggle) -->
+  <script src="js/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+  <!-- jsPDF and html2canvas for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    document.getElementById('downloadPdfBtn').addEventListener('click', function () {
+      const mainContent = document.getElementById('mainContent');
+      html2canvas(mainContent, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new window.jspdf.jsPDF('p', 'pt', 'a4');
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        // Calculate image dimensions to fit A4
+        const imgWidth = pageWidth - 40;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let position = 20;
+        pdf.addImage(imgData, 'PNG', 20, position, imgWidth, imgHeight);
+        pdf.save('ShipTrackr-Project-Report.pdf');
+      });
+    });
+  </script>
+</body>
+</html> 
